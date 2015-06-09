@@ -37,16 +37,41 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.syndication.feed.atom.Link;
+import com.rometools.rome.feed.atom.Link;
 
 /**
  * Represents valid Atom Content
+ * 
  * @author Michael J. Simons
  */
-public class AtomContent implements Serializable, Cloneable {	
+public class AtomContent implements Serializable, Cloneable {
 	private static final long serialVersionUID = -581194592975239597L;
-	
+
 	private List<Link> links;
+
+	public AtomContent addLink(final Link link) {
+		if (getLinks() == null) {
+			setLinks(new ArrayList<Link>());
+		}
+		getLinks().add(link);
+		return this;
+	}
+
+	@Override
+	public AtomContent clone() {
+		final AtomContent clone = new AtomContent();
+		if (getLinks() != null) {
+			try {
+				final List<Link> clonedLinks = new ArrayList<Link>();
+				for (final Link link : getLinks()) {
+					clonedLinks.add((Link) link.clone());
+				}
+				clone.setLinks(clonedLinks);
+			} catch (final CloneNotSupportedException e) {
+			}
+		}
+		return clone;
+	}
 
 	public List<Link> getLinks() {
 		return links;
@@ -55,26 +80,4 @@ public class AtomContent implements Serializable, Cloneable {
 	public void setLinks(List<Link> links) {
 		this.links = links;
 	}
-	
-	public AtomContent addLink(final Link link) {
-		if(this.getLinks() == null)
-			this.setLinks(new ArrayList<Link>());
-		this.getLinks().add(link);
-		return this;
-	}
-
-	@Override
-	protected AtomContent clone() {
-		final AtomContent clone = new AtomContent();
-		if(this.getLinks() != null) {
-			try {
-				final List<Link> clonedLinks = new ArrayList<Link>();
-				for(Link link : this.getLinks())				
-					clonedLinks.add((Link) link.clone());
-				clone.setLinks(clonedLinks);
-			} catch (CloneNotSupportedException e) {					
-			}					
-		}		
-		return clone;
-	}	
 }

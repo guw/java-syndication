@@ -33,62 +33,68 @@
  */
 package ac.simons.syndication.modules.atom;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static com.rometools.utils.Strings.isBlank;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.Namespace;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
 
-import com.sun.syndication.feed.atom.Link;
-import com.sun.syndication.feed.module.Module;
-import com.sun.syndication.io.ModuleGenerator;
+import com.rometools.rome.feed.atom.Link;
+import com.rometools.rome.feed.module.Module;
+import com.rometools.rome.io.ModuleGenerator;
 
 /**
- * @author Michael J. Simons
+ * The generator for {@link AtomModule}
  */
 public class AtomModuleGenerator implements ModuleGenerator {
-	private final static Set<Namespace> namespaces = Collections.unmodifiableSet(new HashSet<Namespace>(Arrays.asList(AtomModule.ATOM_NS)));	
-	
-	@Override
-	public String getNamespaceUri() {
-		return AtomModule.ATOM_10_URI;
-	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Set getNamespaces() {
-		return namespaces;
+	private final static Namespace ATOM_NS = Namespace.getNamespace("atom", AtomModule.ATOM_10_URI);
+
+	private final static Set<Namespace> namespaces = Collections.singleton(ATOM_NS);
+
+	private void addLinks(final Element parent, final AtomContent content) {
+		for (final Link link : content.getLinks()) {
+			final Element e = new Element("link", ATOM_NS);
+
+			if (!isBlank(link.getRel())) {
+				e.setAttribute(new Attribute("rel", link.getRel()));
+			}
+			if (!isBlank(link.getType())) {
+				e.setAttribute(new Attribute("type", link.getType()));
+			}
+			if (!isBlank(link.getHref())) {
+				e.setAttribute(new Attribute("href", link.getHref()));
+			}
+			if (!isBlank(link.getHreflang())) {
+				e.setAttribute(new Attribute("hreflang", link.getHreflang()));
+			}
+			if (!isBlank(link.getTitle())) {
+				e.setAttribute(new Attribute("title", link.getTitle()));
+			}
+			if (link.getLength() != 0) {
+				e.setAttribute(new Attribute("length", Long.toString(link.getLength())));
+			}
+			parent.addContent(e);
+		}
 	}
 
 	@Override
 	public void generate(Module module, Element element) {
-		final AtomContent content = ((AtomModule)module).getContent();
+		final AtomContent content = ((AtomModule) module).getContent();
 
-		this.addLinks(element, content);
+		addLinks(element, content);
 	}
-	
-	private void addLinks(final Element parent, final AtomContent content) {
-		for(Link link : content.getLinks()) {
-			final Element e = new Element("link", AtomModule.ATOM_NS);
 
-			if(!isBlank(link.getRel()))
-				e.setAttribute( new Attribute("rel", link.getRel()));
-			if(!isBlank(link.getType()))
-				e.setAttribute(new Attribute("type", link.getType()));
-			if(!isBlank(link.getHref()))
-				e.setAttribute(new Attribute("href", link.getHref()));
-			if(!isBlank(link.getHreflang()))
-				e.setAttribute(new Attribute("hreflang", link.getHreflang()));
-			if(!isBlank(link.getTitle()))
-				e.setAttribute( new Attribute("title", link.getTitle()));
-			if(link.getLength() != 0) 
-				e.setAttribute(new Attribute("length", Long.toString(link.getLength())));
-			parent.addContent(e);
-		}
-	}	
+	@Override
+	public Set<Namespace> getNamespaces() {
+		return namespaces;
+	}
+
+	@Override
+	public String getNamespaceUri() {
+		return AtomModule.ATOM_10_URI;
+	}
 }

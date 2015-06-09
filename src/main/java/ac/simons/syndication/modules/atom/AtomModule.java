@@ -33,23 +33,19 @@
  */
 package ac.simons.syndication.modules.atom;
 
-import org.jdom.Namespace;
-
-import com.sun.syndication.feed.module.Module;
+import com.rometools.rome.feed.module.Module;
 
 /**
  * This defines an Atom Module to be included into a RSS 2.0 feed
- * @author Michael J. Simons
  */
 public interface AtomModule extends Module {
+
 	/** The public namespace URI */
 	public final static String ATOM_10_URI = "http://www.w3.org/2005/Atom";
-	/** as used in the namespaced prefixed with "atom" */
-    public final static Namespace ATOM_NS = Namespace.getNamespace("atom", ATOM_10_URI);
-    
-    /** Gets the included content */
-    public AtomContent getContent();
-    
-    /** Sets the included content */
-    public void setContent(final AtomContent content);
+
+	/** Gets the included content */
+	public AtomContent getContent();
+
+	/** Sets the included content */
+	public void setContent(final AtomContent content);
 }

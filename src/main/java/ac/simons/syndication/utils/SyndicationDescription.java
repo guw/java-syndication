@@ -33,10 +33,10 @@
  */
 package ac.simons.syndication.utils;
 
-import org.jdom.CDATA;
-import org.jdom.Element;
+import org.jdom2.CDATA;
+import org.jdom2.Element;
 
-import com.sun.syndication.feed.rss.Description;
+import com.rometools.rome.feed.rss.Description;
 
 /**
  * @author Michael J. Simons
@@ -48,6 +48,12 @@ public class SyndicationDescription {
 		return description;
 	}
 
+	public Element toElement() {
+		final Element element = new Element("description");
+		element.addContent(new CDATA(description.getValue()));
+		return element;
+	}
+
 	public SyndicationDescription withType(String type) {
 		description.setType(type);
 		return this;
@@ -56,11 +62,5 @@ public class SyndicationDescription {
 	public SyndicationDescription withValue(String value) {
 		description.setValue(value);
 		return this;
-	}	
-	
-	public Element toElement() {
-		final Element element = new Element("description");
-		element.addContent(new CDATA(this.description.getValue()));
-		return element;
 	}
 }

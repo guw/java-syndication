@@ -33,11 +33,11 @@
  */
 package ac.simons.syndication.utils;
 
-import org.jdom.CDATA;
-import org.jdom.Element;
-import org.jdom.Namespace;
+import org.jdom2.CDATA;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
 
-import com.sun.syndication.feed.rss.Content;
+import com.rometools.rome.feed.atom.Content;
 
 /**
  * @author Michael J. Simons
@@ -49,6 +49,12 @@ public class SyndicationContent {
 		return content;
 	}
 
+	public Element toElement() {
+		final Element element = new Element("encoded", Namespace.getNamespace("content", "http://purl.org/rss/1.0/modules/content/"));
+		element.addContent(new CDATA(content.getValue()));
+		return element;
+	}
+
 	public SyndicationContent withType(String type) {
 		content.setType(type);
 		return this;
@@ -57,11 +63,5 @@ public class SyndicationContent {
 	public SyndicationContent withValue(String value) {
 		content.setValue(value);
 		return this;
-	}	
-	
-	public Element toElement() {
-		final Element element = new Element("encoded", Namespace.getNamespace("content", "http://purl.org/rss/1.0/modules/content/"));
-		element.addContent(new CDATA(this.content.getValue()));
-		return element;
 	}
 }

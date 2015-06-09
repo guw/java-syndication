@@ -33,43 +33,44 @@
  */
 package ac.simons.syndication.modules.atom;
 
-import com.sun.syndication.feed.module.ModuleImpl;
+import com.rometools.rome.feed.CopyFrom;
+import com.rometools.rome.feed.module.ModuleImpl;
 
 /**
- * @author Michael J. Simons
+ * Implementation of {@link AtomModule}.
  */
-public class AtomModuleImpl extends ModuleImpl implements AtomModule {	 
+public class AtomModuleImpl extends ModuleImpl implements AtomModule {
 	private static final long serialVersionUID = 4969257358292393781L;
 
 	private AtomContent content;
-	
+
 	public AtomModuleImpl() {
 		super(AtomModuleImpl.class, ATOM_10_URI);
 	}
-		
+
 	public AtomModuleImpl(AtomContent content) {
 		this();
 		this.content = content;
 	}
-	
-	@Override
-	public Class<? extends Object> getInterface() {
-		return AtomModule.class;
-	}
 
 	@Override
-	public void copyFrom(Object obj) {
+	public void copyFrom(CopyFrom obj) {
 		final AtomModule module = (AtomModule) obj;
-		this.setContent(module.getContent().clone());		
+		setContent(module.getContent().clone());
 	}
 
 	@Override
 	public AtomContent getContent() {
-		return this.content;
+		return content;
+	}
+
+	@Override
+	public Class<? extends CopyFrom> getInterface() {
+		return AtomModule.class;
 	}
 
 	@Override
 	public void setContent(AtomContent content) {
 		this.content = content;
-	}		
+	}
 }

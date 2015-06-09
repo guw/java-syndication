@@ -33,9 +33,9 @@
  */
 package ac.simons.syndication.utils;
 
-import static org.apache.commons.lang.StringUtils.defaultIfBlank;
+import static com.rometools.utils.Strings.trimToNull;
 
-import com.sun.syndication.feed.atom.Person;
+import com.rometools.rome.feed.atom.Person;
 
 /**
  * @author Michael J. Simons
@@ -47,18 +47,18 @@ public class SyndicationPerson {
 		return person;
 	}
 
-	public SyndicationPerson withName(String name) {
-		person.setName(defaultIfBlank(name, null));
-		return this;
-	}
-
-	public SyndicationPerson withUrl(String url) {		
-		person.setUrl(defaultIfBlank(url, null));
-		return this;
-	}
-
 	public SyndicationPerson withEmail(String email) {
-		person.setEmail(defaultIfBlank(email, null));
+		person.setEmail(trimToNull(email));
 		return this;
-	}	
+	}
+
+	public SyndicationPerson withName(String name) {
+		person.setName(trimToNull(name));
+		return this;
+	}
+
+	public SyndicationPerson withUrl(String url) {
+		person.setUrl(trimToNull(url));
+		return this;
+	}
 }
